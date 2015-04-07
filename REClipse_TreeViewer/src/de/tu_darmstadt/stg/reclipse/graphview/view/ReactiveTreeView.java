@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Slider;
+import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
@@ -44,7 +44,7 @@ public class ReactiveTreeView extends ViewPart implements IDebugEventSetListener
 
   protected CustomGraph graph;
 
-  protected Slider slider;
+  protected Scale slider;
   private boolean showGraph = false;
   protected boolean manualMode = false;
 
@@ -65,10 +65,7 @@ public class ReactiveTreeView extends ViewPart implements IDebugEventSetListener
     // create graph
     graph = new CustomGraph(parent);
 
-    // be careful: you have to set environment variable LIBOVERLAY_SCROLLBAR=0
-    // under Ubuntu / OpenJDK, so that the slider works - see
-    // https://bugs.eclipse.org/bugs/show_bug.cgi?id=368929
-    slider = new Slider(parent, SWT.HORIZONTAL);
+    slider = new Scale(parent, SWT.HORIZONTAL);
     slider.setMinimum(0);
     slider.setIncrement(1);
     slider.setPageIncrement(1);
@@ -196,7 +193,7 @@ public class ReactiveTreeView extends ViewPart implements IDebugEventSetListener
         if (slider == null || slider.isDisposed()) {
           return;
         }
-        slider.setMaximum(DatabaseHelper.getLastPointInTime() + slider.getThumb());
+        slider.setMaximum(DatabaseHelper.getLastPointInTime());
         if (!manualMode) {
           slider.setSelection(slider.getMaximum());
           // notify the listeners, because this is not done automatically when
